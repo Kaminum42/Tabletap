@@ -1,0 +1,4 @@
+.vscode/
+docker_images/
+node_modules/
+src/
