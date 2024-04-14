@@ -3,10 +3,10 @@ import { SessionEntity } from "@src/entities/sessions";
 import { UsersEntity } from "@src/entities/users";
 import { isInt, min, max } from "class-validator";
 import multer from "multer";
-import { BadRequestError, Controller, ForbiddenError, JsonController, NotFoundError, Param, Post, Req, Res, Session, UnauthorizedError, UploadedFile, UploadedFiles, UseBefore } from "routing-controllers";
+import { BadRequestError,ForbiddenError, JsonController, NotFoundError, Param, Post, Req, Res, Session, UnauthorizedError,UseBefore } from "routing-controllers";
 import { Raw } from "typeorm";
 
-@Controller('/api/v1/users/:user_id')
+@JsonController('/api/v1/users/:user_id')
 export class UsersUploadIconController {
     @Post('/upload_icon')
     @UseBefore(multer({ dest: '/res/uploads' }).single("file"))
