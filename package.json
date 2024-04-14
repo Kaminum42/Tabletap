@@ -6,8 +6,12 @@
   "scripts": {
     "tsc-build": "tsc -p . && tsc-alias",
     "docker-build": "docker build -t tabletap:%npm_package_version% -t tabletap:latest .",
-    "docker-stop": "(docker stop tabletap || echo already stopped) && (docker rm tabletap || echo already removed)",
-    "docker-run": "docker run -it --name tabletap -e NODE_ENV=prod --network=tablenet -p 443:3000 -v /app/res/:/res/ -v /var/run/docker.sock:/var/run/docker.sock --log-opt max-size=100m --log-opt max-file=3 --restart=always -d tabletap:latest",
+    "docker-db-stop": "(docker stop postgres || echo already stopped) && (docker rm postgres || echo already removed)",
+    "docker-app-stop": "(docker stop -t 1 tabletap || echo already stopped) && (docker rm tabletap || echo already removed)",
+    "docker-db-run": "docker run -it --name postgres -e POSTGRES_USER=tabletap -e POSTGRES_PASSWORD=tbtp --network=tablenet -p 5432:5432 -v /app/pg/:/var/lib/postgresql/data/ --log-opt max-size=100m --log-opt max-file=3 --restart=always -d postgres:latest",
+    "docker-app-run": "docker run -it --name tabletap -e NODE_ENV=prod --network=tablenet -p 443:3000 -v /app/res/:/res/ -v /var/run/docker.sock:/var/run/docker.sock --log-opt max-size=100m --log-opt max-file=3 --restart=always -d tabletap:latest",
+    "docker-stop": "npm run docker-app-stop",
+    "docker-run": "npm run docker-app-run",
 
     "deploy-export": "docker save tabletap:latest -o ./docker_images/tabletap-latest.tar",
     "deploy-7z-delete": "powershell.exe -Command \"rm ./docker_images/tabletap-latest.7z\" || exit 0",

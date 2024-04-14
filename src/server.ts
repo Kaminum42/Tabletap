@@ -9,7 +9,7 @@ import morgan from 'morgan';
 import { TypeormStore } from 'connect-typeorm';
 import { AppDataSource } from './data_source';
 import cors from 'cors';
-import bodyParser from 'body-parser';
+import multer from 'multer';
 
 const runExpress = (): void => {
     const sslDir = process.env.NODE_ENV === 'prod' ? '/res/ssl' : path.join(__dirname, '../res/ssl');
@@ -20,7 +20,7 @@ const runExpress = (): void => {
     };
 
     const expressServer = express();
-
+    
     const httpsServer = https.createServer(options, expressServer);
 
     const corsOptions = {
@@ -29,6 +29,8 @@ const runExpress = (): void => {
     };
 
     expressServer.use(cors()); // Enable CORS
+    expressServer.use(morgan("dev"));
+    // expressServer.use(multer({ dest: '/res/uploads' }).any());
 
     expressServer.use(session({
         name: 'sessionid',
@@ -55,10 +57,6 @@ const runExpress = (): void => {
         defaultErrorHandler: false,
         // routePrefix: '/api/v1'
     });
-
-    expressServer.use(morgan("dev"));
-    expressServer.use(bodyParser.json());
-    expressServer.use(bodyParser.urlencoded({ extended: true }));
 
     if (process.env.NODE_ENV !== 'prod') {
         expressServer.use('/res/static', express.static(path.join(__dirname, '../res/static')));

@@ -1,4 +1,6 @@
 .vscode/
 docker_images/
-node_modules/
 src/
+tools/
+tests/
+etc/

@@ -2,3 +2,6 @@ res/
 node_modules/
 docker_images/
 dist/
+tools/
+tests/
+etc/
