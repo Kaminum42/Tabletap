@@ -20,7 +20,8 @@
     "build": "npm run tsc-build && npm run docker-build",
     "start": "npm run docker-stop && npm run docker-run",
     "auto": "npm run build && npm run start",
-    "deploy": "npm run deploy-export && run deploy-7z-delete && npm run deploy-compress && npm run deploy-send-image && npm run deploy-run-script",
+    "deploy": "npm run deploy-export && npm run deploy-7z-delete && npm run deploy-compress && npm run deploy-send-image && npm run deploy-run-script",
+    "full": "npm run auto && npm run deploy",
     "test": "echo hello"
   },
   "keywords": [],
