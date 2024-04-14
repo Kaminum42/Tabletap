@@ -1,6 +1,6 @@
 {
   "name": "tabletap",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
@@ -12,7 +12,6 @@
     "docker-app-run": "docker run -it --name tabletap -e NODE_ENV=prod --network=tablenet -p 443:3000 -v /app/res/:/res/ -v /var/run/docker.sock:/var/run/docker.sock --log-opt max-size=100m --log-opt max-file=3 --restart=always -d tabletap:latest",
     "docker-stop": "npm run docker-app-stop",
     "docker-run": "npm run docker-app-run",
-
     "deploy-export": "docker save tabletap:latest -o ./docker_images/tabletap-latest.tar",
     "deploy-7z-delete": "powershell.exe -Command \"rm ./docker_images/tabletap-latest.7z\" || exit 0",
     "deploy-compress": "7z a ./docker_images/tabletap-latest.7z ./docker_images/tabletap-latest.tar",
