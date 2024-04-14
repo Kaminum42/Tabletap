@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "tsc-build": "tsc -p . && tsc-alias",
+    "tsc-build": "node ./hooks/version.js && tsc -p . && tsc-alias",
     "docker-build": "docker build -t tabletap:%npm_package_version% -t tabletap:latest .",
     "docker-db-stop": "(docker stop postgres || echo already stopped) && (docker rm postgres || echo already removed)",
     "docker-app-stop": "(docker stop -t 1 tabletap || echo already stopped) && (docker rm tabletap || echo already removed)",
