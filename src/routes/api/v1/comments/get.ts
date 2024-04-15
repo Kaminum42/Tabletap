@@ -25,7 +25,7 @@ export class CommentsGetController {
         page = page ?? 1;
 
         if(!isEmpty(pageSize)) {
-            if(!isInt(pageSize) || !min(pageSize, 1) || !max(pageSize, 50)) {
+            if(!isInt(pageSize) || !min(pageSize, 1) || !max(pageSize, 999999)) {
                 throw new BadRequestError('Invalid page size.');
             }
         }

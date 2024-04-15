@@ -8,6 +8,8 @@
 
 import { AppDataSource } from "@src/data_source";
 import { MessagesEntity } from "@src/entities/messages";
+import { UsersEntity } from "@src/entities/users";
+import { pickProperties } from "@src/utils/pick_properties";
 import { instanceToPlain } from "class-transformer";
 import { isInt, min, max, isEmpty } from "class-validator";
 import { BadRequestError, ForbiddenError, Get, JsonController, QueryParam, Res, Session, UnauthorizedError } from "routing-controllers";
@@ -51,7 +53,7 @@ import { BadRequestError, ForbiddenError, Get, JsonController, QueryParam, Res, 
 //         page = page ?? 1;
 
 //         if(!isEmpty(pageSize)) {
-//             if(!isInt(pageSize) || !min(pageSize, 1) || !max(pageSize, 50)) {
+//             if(!isInt(pageSize) || !min(pageSize, 1) || !max(pageSize, 999999)) {
 //                 throw new BadRequestError('Invalid page size.');
 //             }
 //         }
@@ -112,7 +114,8 @@ import { BadRequestError, ForbiddenError, Get, JsonController, QueryParam, Res, 
 export class MessagesGetController {
     @Get()
     async getMessages(@Session() sess: any, @QueryParam("user", { required: false }) user: number, @Res() res: any) {
-        const repo = AppDataSource.getRepository(MessagesEntity);
+        const userRepo = AppDataSource.getRepository(UsersEntity);
+        const messageRepo = AppDataSource.getRepository(MessagesEntity);
 
         if(!sess.user) {
             throw new UnauthorizedError('You are not logged in.');
@@ -128,7 +131,7 @@ export class MessagesGetController {
         }
 
         // find all messages from or to this user
-        const result = await repo
+        const result = await messageRepo
             .createQueryBuilder('message')
             .where('message.from_user = :from_user OR message.to_user = :to_user', { from_user: user, to_user: user })
             .getMany();
@@ -149,9 +152,24 @@ export class MessagesGetController {
             value.sort((a, b) => a.send_time - b.send_time);
         });
 
+        const basicProps = ['user_id', 'username', 'permission_level', 'profile_visibility'];
+        const privateProps = ["nickname", "email", "create_time", "update_time", "experience", "level", "icon_url", "gender", "birthday", "phone", "address", "details"];
+        
         const arr = [];
         for(const [key, value] of map) {
-            arr.push({ with: key, messages: value });
+            
+            // search user with user_id = key
+            const other = await userRepo
+            .createQueryBuilder('user')
+            .where('user.user_id = :user_id', { user_id: key })
+            .getOne();
+            if(!other) {
+                continue;
+            }
+
+            const props = sess.user.permission_level < 200 || sess.user.user_id == other || other.profile_visibility ? [...basicProps, ...privateProps] : basicProps;
+
+            arr.push({ with: pickProperties(instanceToPlain(other), props), messages: value });
         }
 
         res.statusCode = 200;
