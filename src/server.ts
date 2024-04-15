@@ -61,10 +61,11 @@ const runExpress = (): void => {
     if (process.env.NODE_ENV !== 'prod') {
         expressServer.use('/res/static', express.static(path.join(__dirname, '../res/static')));
         expressServer.use('/res/uploads', express.static(path.join(__dirname, '../res/uploads')));
-        
+        expressServer.use('/', express.static('../res/front_end'));
     } else {
         expressServer.use('/res/static', express.static('/res/static'));
         expressServer.use('/res/uploads', express.static('/res/uploads'));
+        expressServer.use('/', express.static('/res/front_end'));
     }
 
     httpsServer.listen(3000, (): void => {
