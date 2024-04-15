@@ -27,6 +27,10 @@ export class GamesOpenController {
             throw new NotFoundError('Game not found');
         }
 
+        if(result.on_shelve) {
+            throw new BadRequestError('Game is already open');
+        }
+
         gameRepo.merge(result, { on_shelve: true });
         await gameRepo.save(result);
 

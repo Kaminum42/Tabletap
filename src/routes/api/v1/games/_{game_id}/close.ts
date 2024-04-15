@@ -27,6 +27,10 @@ export class GamesCloseController {
             throw new NotFoundError('Game not found');
         }
 
+        if(!result.on_shelve) {
+            throw new BadRequestError('Game is already closed');
+        }
+
         gameRepo.merge(result, { on_shelve: false });
         await gameRepo.save(result);
 
