@@ -10,7 +10,7 @@ import { BadRequestError, Get, InternalServerError, JsonController, QueryParam, 
 export class RankingsGetController {
 
     @Get()
-    async getRankings(@QueryParam('game', { required: false }) game: string, @QueryParam('user', { required: false }) user: string, @QueryParam('page', { required: false }) page: number, @QueryParam('page_size', { required: false }) pageSize: number, @QueryParam('sort', { required: false }) sort: string, @Res() res: any) {
+    async getRankings(@QueryParam('game', { required: false }) game: number, @QueryParam('user', { required: false }) user: number, @QueryParam('page', { required: false }) page: number, @QueryParam('page_size', { required: false }) pageSize: number, @QueryParam('sort', { required: false }) sort: string, @Res() res: any) {
         const repo = AppDataSource.getRepository(RankingsEntity);
 
         if(isEmpty(game) && isEmpty(user)) {
