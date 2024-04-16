@@ -22,13 +22,13 @@ export class RoundsGetController {
         }
 
         if(!isEmpty(game)) {
-            if(!isInt(game) || !min(page, 1) || !max(page, 2147483647)) {
+            if(!isInt(game) || !min(game, 1) || !max(game, 2147483647)) {
                 throw new BadRequestError('Invalid game.');
             }
         }
 
         if(!isEmpty(user)) {
-            if(!isInt(user) || !min(page, 1) || !max(page, 2147483647)) {
+            if(!isInt(user) || !min(user, 1) || !max(user, 2147483647)) {
                 throw new BadRequestError('Invalid user.');
             }
             if(sess.user.permission_level >= 200 && sess.user.user_id !== user) {

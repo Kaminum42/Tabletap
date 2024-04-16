@@ -5,17 +5,17 @@ import { plainToClass, classToPlain, instanceToPlain, plainToInstance } from 'cl
 import { isInt, max, min } from 'class-validator';
 import { pickProperties } from '@src/utils/pick_properties';
 
-@JsonController('/api/v1/users/:id')
+@JsonController('/api/v1/users/:user_id')
 export class UsersGetController {
     @Get()
-    async getUser(@Session() sess: any, @Param('id') id: number, @Res() res: any) {
+    async getUser(@Session() sess: any, @Param('user_id') user_id: number, @Res() res: any) {
         const repo = AppDataSource.getRepository(UsersEntity);
         
-        if (!isInt(id) || !min(id, 0) || !max(id, 2147483647)) {
+        if (!isInt(user_id) || !min(user_id, 0) || !max(user_id, 2147483647)) {
             throw new BadRequestError('Invalid user id.');
         }
 
-        const result = await repo.findOne({ where: { user_id: id } });
+        const result = await repo.findOne({ where: { user_id: user_id } });
         if (!result) {
             throw new NotFoundError('User not found.');
         }

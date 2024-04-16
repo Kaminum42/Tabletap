@@ -63,7 +63,7 @@ export class CommentsGetController {
 
         const props = ['comment_id', 'associated_game', 'user', 'create_time', 'content', 'details'];
 
-        const comments = pickProperties(instanceToPlain(result), props);
+        const comments = result.map((item) => pickProperties(instanceToPlain(item), props));
 
         res.statusCode = 200;
         return comments;

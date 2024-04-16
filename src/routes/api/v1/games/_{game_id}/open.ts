@@ -2,6 +2,7 @@ import { AppDataSource } from "@src/data_source";
 import { GamesEntity } from "@src/entities/games";
 import { isInt, min, max } from "class-validator";
 import { BadRequestError, ForbiddenError, JsonController, NotFoundError, Param, Post, Res, Session, UnauthorizedError } from "routing-controllers";
+import  { docker } from "@src/docker";
 
 @JsonController('/api/v1/games/:game_id')
 export class GamesOpenController {
@@ -34,7 +35,23 @@ export class GamesOpenController {
         gameRepo.merge(result, { on_shelve: true });
         await gameRepo.save(result);
 
-        // TODO start docker container
+        // TODO start docker container with server_config
+        // const config = result.server_config;
+        // const container = await docker.createContainer({
+        //     Image: result.server_image,
+        //     name: `game-${game_id}`,
+        //     HostConfig: {
+        //         Binds: [`${config.save_path}:/server/saves`],
+        //         PortBindings: {
+        //             [`${config.port}/tcp`]: [{ HostPort: config.host_port.toString() }]
+        //         }
+        //     },
+        //     Env: Object.keys(config.env).map(key => `${key}=${config.env[key]}`),
+        //     AttachStdout: true,
+        //     AttachStderr: true
+        // });
+        // await container.start();
+        
 
         res.statusCode = 202;
         return game_id;

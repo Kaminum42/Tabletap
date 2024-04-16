@@ -19,7 +19,7 @@ export class GamesGetController {
             throw new UnauthorizedError('You are not logged in.');
         }
 
-        if(session.user.permission_level < 200) {
+        if(session.user.permission_level >= 200) {
             throw new ForbiddenError('You do not have permission to edit this game.');
         }
 

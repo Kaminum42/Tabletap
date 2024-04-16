@@ -1,11 +1,13 @@
 import { AppDataSource } from "@src/data_source";
 import { GamesEntity } from "@src/entities/games";
 import { isInt, min, max } from "class-validator";
-import { BadRequestError, ForbiddenError, JsonController, NotFoundError, Param, Post, Req, Res, Session, UnauthorizedError } from "routing-controllers";
+import multer from "multer";
+import { BadRequestError, ForbiddenError, JsonController, NotFoundError, Param, Post, Req, Res, Session, UnauthorizedError, UseBefore } from "routing-controllers";
 
 @JsonController('/api/v1/games/:game_id')
 export class GamesUploadIconController {
     @Post('/upload_icon')
+    @UseBefore(multer({ dest: '/res/uploads' }).single("file"))
     async uploadIcon(@Session() sess: any, @Param('game_id') game_id: number, @Req() req: any, @Res() res: any) {
         const gameRepo = AppDataSource.getRepository(GamesEntity);
 
