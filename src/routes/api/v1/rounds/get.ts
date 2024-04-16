@@ -27,15 +27,15 @@ export class RoundsGetController {
             }
         }
 
+        if((isEmpty(user) || user !== sess.user.user_id) && sess.user.permission_level >= 200) {
+            throw new ForbiddenError('You do not have permission to access these rounds.');
+        }
+
         if(!isEmpty(user)) {
             if(!isInt(user) || !min(user, 1) || !max(user, 2147483647)) {
                 throw new BadRequestError('Invalid user.');
             }
-            if(sess.user.permission_level >= 200 && sess.user.user_id !== user) {
-                throw new ForbiddenError('You do not have permission to access this user\'s rounds.');
-            }
         }
-        user = user ?? sess.user.user_id;
 
         if(!isEmpty(page)) {
             if(!isInt(page) || !min(page, 1) || !max(page, 2147483647)) {
