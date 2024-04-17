@@ -3,7 +3,7 @@ import { RoundsEntity } from "@src/entities/rounds";
 import { isInt, max, min } from "class-validator";
 import { BadRequestError, Body, Delete, ForbiddenError, JsonController, NotFoundError, Param, Res, Session, UnauthorizedError } from "routing-controllers";
 
-@JsonController('/api/v1/rounds')
+@JsonController('/api/v1/rounds/:round_id')
 export class RoundsDeleteController {
     @Delete()
     async deleteRound(@Session() sess: any, @Param('round_id') round_id: number, @Res() res: any) {
