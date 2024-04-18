@@ -1,5 +1,6 @@
 import { AppDataSource } from "@src/data_source";
 import { GamesEntity } from "@src/entities/games";
+import { Uploader } from "@src/upload";
 import { isInt, min, max } from "class-validator";
 import multer from "multer";
 import { BadRequestError, ForbiddenError, JsonController, NotFoundError, Param, Post, Req, Res, Session, UnauthorizedError, UseBefore } from "routing-controllers";
@@ -7,7 +8,7 @@ import { BadRequestError, ForbiddenError, JsonController, NotFoundError, Param, 
 @JsonController('/api/v1/games/:game_id')
 export class GamesUploadCoverController {
     @Post('/upload_cover')
-    @UseBefore(multer({ dest: '/res/uploads' }).single("file"))
+    @UseBefore(Uploader("/res/uploads/").single("file"))
     async uploadCover(@Session() sess: any, @Param('game_id') game_id: number, @Req() req: any, @Res() res: any) {
         const gameRepo = AppDataSource.getRepository(GamesEntity);
 

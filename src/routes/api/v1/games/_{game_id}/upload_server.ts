@@ -5,11 +5,12 @@ import multer from "multer";
 import { BadRequestError, Body, ForbiddenError, JsonController, NotFoundError, Param, Post, QueryParam, Req, Res, Session, UnauthorizedError, UseBefore } from "routing-controllers";
 import fs from "fs";
 import  { docker } from "@src/docker";
+import { Uploader } from "@src/upload";
 
 @JsonController('/api/v1/games/:game_id')
 export class UploadServer {
     @Post('/upload_server')
-    @UseBefore(multer({ dest: '/res/tmp' }).single("file"))
+    @UseBefore(Uploader('/res/tmp').single("file"))
     async uploadServer(@Session() session: any, @Param('game_id') game_id: number, @QueryParam('image_name') image_name: string, @Req() req: any, @Res() res: any) {
         const repo = AppDataSource.getRepository(GamesEntity);
 

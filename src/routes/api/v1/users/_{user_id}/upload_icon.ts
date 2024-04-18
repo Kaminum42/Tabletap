@@ -1,6 +1,7 @@
 import { AppDataSource } from "@src/data_source";
 import { SessionEntity } from "@src/entities/sessions";
 import { UsersEntity } from "@src/entities/users";
+import { Uploader } from "@src/upload";
 import { isInt, min, max } from "class-validator";
 import multer from "multer";
 import { BadRequestError,ForbiddenError, JsonController, NotFoundError, Param, Post, Req, Res, Session, UnauthorizedError,UseBefore } from "routing-controllers";
@@ -9,7 +10,7 @@ import { Raw } from "typeorm";
 @JsonController('/api/v1/users/:user_id')
 export class UsersUploadIconController {
     @Post('/upload_icon')
-    @UseBefore(multer({ dest: '/res/uploads' }).single("file"))
+    @UseBefore(Uploader('/res/uploads').single("file"))
     async uploadIcon(@Session() sess: any, @Param('user_id') user_id: number, @Req() req: any, @Res() res: any) {
         const userRepo = AppDataSource.getRepository(UsersEntity);
         const sessRepo = AppDataSource.getRepository(SessionEntity);

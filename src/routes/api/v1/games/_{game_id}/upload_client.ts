@@ -4,11 +4,12 @@ import compressing from "compressing";
 import { AppDataSource } from "@src/data_source";
 import { GamesEntity } from "@src/entities/games";
 import { isInt, min, max } from "class-validator";
+import { Uploader } from "@src/upload";
 
 @JsonController('/api/v1/games/:game_id')
 export class GamesUploadClientController {
     @Post('/upload_client')
-    @UseBefore(multer({ dest: '/res/tmp' }).single("file"))
+    @UseBefore(Uploader("/res/uploads/").single("file"))
     async uploadClient(@Session() sess: any, @Param('game_id') game_id: number, @QueryParam('entrypoint') entrypoint: string, @Req() req: any, @Res() res: any) {
         const gameRepo = AppDataSource.getRepository(GamesEntity);
 
