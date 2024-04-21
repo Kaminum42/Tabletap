@@ -45,9 +45,9 @@ export class GamesGetController {
             }
         }
 
-        if(!sess.user) {
-            throw new UnauthorizedError('You are not logged in.');
-        }
+        // if(!sess.user) {
+        //     throw new UnauthorizedError('You are not logged in.');
+        // }
 
         const query = repo
             .createQueryBuilder('game')
